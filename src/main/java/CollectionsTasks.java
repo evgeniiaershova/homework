@@ -1,3 +1,4 @@
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -61,40 +62,39 @@ public class CollectionsTasks {
         }
 
         while (!stack.empty()) {
-            String actualBracket = stack.pop();
-            String brClose = "";
+            String brOpen = stack.pop();
             String expected = "";
-                switch (actualBracket) {
+                switch (brOpen) {
                     case "(":
-                        brClose = stack.pop();
-                        expected = ")";
-                        if (!brClose.equals(expected)) {
-                            throw new AssertionError("Wrong bracket after " + actualBracket +
-                                    ". Bracket should be " + expected + ", but was " + brClose);
-                        }
+                            expected = ")";
+                            checkBracket(stack, expected, brOpen);
                         break;
                     case "[":
-                        brClose = stack.pop();
-                        expected = "]";
-                        if (!brClose.equals(expected)) {
-                            throw new AssertionError("Wrong bracket after " + actualBracket +
-                                    ". Bracket should be " + expected + ", but was " + brClose);
-                        }
+                            expected = "]";
+                            checkBracket(stack, expected, brOpen);
                         break;
                     case "{":
-                        brClose = stack.pop();
-                        expected = "}";
-                        if (!brClose.equals(expected)) {
-                            throw new AssertionError("Wrong bracket after " + actualBracket +
-                                    ". Bracket should be " + expected + ", but was " + brClose);
-                        }
+                            expected = "}";
+                            checkBracket(stack, expected, brOpen);
                         break;
                     default:
-                        throw new AssertionError("Character should be opening bracket, but was " + actualBracket);
+                        throw new AssertionError("Character should be opening bracket, but was " + brOpen);
                 }
             }
         }
 
+    private static void checkBracket(Stack<String> stack, String expected, String brOpen) {
+        if (!stack.empty()) {
+           String brClose = stack.pop();
+            if (!brClose.equals(expected)) {
+                throw new AssertionError("Wrong bracket after " + brOpen +
+                        ". Bracket should be " + expected + ", but was " + brClose);
+            }
+        } else {
+            throw new AssertionError("There's opening bracket: " + brOpen
+                    + ", but closing bracket is missing.");
+        }
+    }
 
     private static void task3() throws Exception {
       File file = null;
@@ -252,6 +252,10 @@ public class CollectionsTasks {
             printCollection("The nearest int: ", result);
 
         }
+    }
+
+    private static void task6() throws OperationNotSupportedException {
+        throw new OperationNotSupportedException("Task 6 ");
     }
 
     private static void printCollection(String comment, Collection collection) {
