@@ -18,6 +18,11 @@ public class Matrix {
         System.out.println("Enter the index of the column. It should be an integer in the range between " + 0 + " and " + (matrix.length - 1));
         int k = scanner.nextInt();
 
+        while ( ! ((k>= 0) && (k <= matrix.length - 1))) {
+            System.out.println("\"K\" should be an integer in the range between " + 0 + " and " + (matrix.length - 1));
+            k = scanner.nextInt();
+        }
+
         for (int row = 0; row < matrix.length - 1; row ++ ) {
             int[] currentMinRow = matrix[row];
             int currentMinIndex = row;
@@ -41,8 +46,14 @@ public class Matrix {
 
     private static int[][] createMatrix() {
 
-        System.out.println("Enter an integer to set the size of the matrix: ");
+        System.out.println("Enter an integer to set the size of the matrix. Integer should be > 1: ");
         int size = scanner.nextInt();
+
+        while ( ! (size > 1)) {
+            System.out.println("Please enter an integer > 1:");
+            size = scanner.nextInt();
+        }
+
         int[][] matrix = new int[size][size];
 
         Random generator = new Random();
