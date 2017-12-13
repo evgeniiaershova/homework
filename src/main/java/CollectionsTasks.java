@@ -4,39 +4,33 @@ import java.util.*;
 
 public class CollectionsTasks {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-    for (int i = 0; i < 10; i ++){
-        task4ArrayList();
-        task4LinkedList();
-        }
-
-
-        MyCustomClass myCustomClass = new MyCustomClass();
-        myCustomClass
-                .addInt(5)
-                .addInt(7)
-                .addInt(15)
-                .addInt(100)
-                .addInt(9)
-                .addInt(-8);
-        System.out.println(Arrays.toString(myCustomClass.findNearestInt(8)));
+        task1();
+        task2("'(', ')', '[', ']', '{', '}'");
+        task3();
+        task4(10);
+        task4(100);
+        task4(1000);
+        task4(10000);
+        task4(100000);
+        task5(0);
     }
 
     private static void task1() throws Exception {
-     File file = null;
-      Scanner scanner = null;
+        File file = null;
+        Scanner scanner = null;
 
-      try {
-         file = new File("C:\\Users\\Evgeniia_Ershova\\Documents\\Text_files\\text_for_collections.txt");
-         scanner = new Scanner(file);
-         if (!scanner.hasNext()) {
-             throw new Exception("File is empty!");
-         }
-      }
-      catch (FileNotFoundException ex) {
-          throw  new Exception("File \"text\" was not found", ex);
-      }
+        try {
+            file = new File("C:\\Users\\Evgeniia_Ershova\\Documents\\Text_files\\text_for_collections.txt");
+            scanner = new Scanner(file);
+                if (!scanner.hasNext()) {
+                    throw new Exception("File is empty!");
+                }
+        }
+        catch (FileNotFoundException ex) {
+            throw  new Exception("File \"text\" was not found", ex);
+        }
 
         Stack stack = new Stack();
 
@@ -57,13 +51,53 @@ public class CollectionsTasks {
         }
     }
 
-    private static void task2() {
-        throw new UnsupportedOperationException("Task2 was not implemented yet!");
-    }
+    private static void task2(String initialString) {
+        List<String> br = Arrays.asList(initialString.replaceAll("[', ]", "").split(""));
+        Collections.reverse(br);
+
+        Stack<String> stack = new Stack<String>();
+        for (String bracket: br) {
+            stack.push(bracket);
+        }
+
+        while (!stack.empty()) {
+            String actualBracket = stack.pop();
+            String brClose = "";
+            String expected = "";
+                switch (actualBracket) {
+                    case "(":
+                        brClose = stack.pop();
+                        expected = ")";
+                        if (!brClose.equals(expected)) {
+                            throw new AssertionError("Wrong bracket after " + actualBracket +
+                                    ". Bracket should be " + expected + ", but was " + brClose);
+                        }
+                        break;
+                    case "[":
+                        brClose = stack.pop();
+                        expected = "]";
+                        if (!brClose.equals(expected)) {
+                            throw new AssertionError("Wrong bracket after " + actualBracket +
+                                    ". Bracket should be " + expected + ", but was " + brClose);
+                        }
+                        break;
+                    case "{":
+                        brClose = stack.pop();
+                        expected = "}";
+                        if (!brClose.equals(expected)) {
+                            throw new AssertionError("Wrong bracket after " + actualBracket +
+                                    ". Bracket should be " + expected + ", but was " + brClose);
+                        }
+                        break;
+                    default:
+                        throw new AssertionError("Character should be opening bracket, but was " + actualBracket);
+                }
+            }
+        }
 
 
     private static void task3() throws Exception {
-           File file = null;
+      File file = null;
       Scanner scanner = null;
 
       try {
@@ -72,10 +106,10 @@ public class CollectionsTasks {
          if (!scanner.hasNext()) {
              throw new Exception("File is empty!");
          }
-      }
-      catch (FileNotFoundException ex) {
+         }
+        catch (FileNotFoundException ex) {
           throw  new Exception("File \"text\" was not found", ex);
-      }
+        }
 
         List<String> list = new ArrayList<String>();
 
@@ -83,50 +117,18 @@ public class CollectionsTasks {
             list.add(scanner.next().toLowerCase().replaceAll("\\p{P}", ""));
         }
 
-        HashSet<String> set = new HashSet<>();
+        HashSet<String> set = new HashSet<String>();
         for (int i = 0; i < list.size(); i++) {
             String word = list.get(i);
             set.add(word);
         }
     }
 
-    private static void task4ArrayList() {
+    private static long task4ArrayList(int nPeople) {
 
-        int nPeople = 1000;
         long startTime = System.nanoTime();
 
-        List<Integer> list = new ArrayList<>();
-        for (int i = 1; i <= nPeople; i++) {
-            list.add(i);
-        }
-
-        while (list.size() > 1) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) % 2 == 0) {
-                    list.remove(list.get(i));
-                    i--;
-                }
-            }
-            int listSize = list.size();
-//            printCollection("After remove", list);
-
-            list.clear();
-            for (int j = 0, num = 1; j < listSize; j++) {
-                list.add(num);
-                num++;
-            }
-            printCollection("After reinit", list);
-        }
-
-        System.out.println("ArrayList time consumed: " + (System.nanoTime() - startTime));
-    }
-
-    private static void task4LinkedList() {
-
-        int nPeople = 1000;
-        long startTime = System.nanoTime();
-
-        List<Integer> list = new LinkedList<>();
+        List<Integer> list = new ArrayList<Integer>();
         for (int i = 1; i <= nPeople; i++) {
             list.add(i);
         }
@@ -148,7 +150,108 @@ public class CollectionsTasks {
             }
 //            printCollection("After reinit", list);
         }
-        System.out.println("LinkedList time consumed: " + (System.nanoTime() - startTime));
+        long timeConsumed = System.nanoTime() - startTime;
+        System.out.println("ArrayList time consumed: " + timeConsumed);
+        return timeConsumed;
+    }
+
+    private static long task4LinkedList(int nPeople) {
+
+        long startTime = System.nanoTime();
+
+        List<Integer> list = new LinkedList<Integer>();
+        for (int i = 1; i <= nPeople; i++) {
+            list.add(i);
+        }
+
+        while (list.size() > 1) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) % 2 == 0) {
+                    list.remove(list.get(i));
+                    i--;
+                }
+            }
+            int listSize = list.size();
+//            printCollection("After remove", list);
+
+            list.clear();
+            for (int j = 0, num = 1; j < listSize; j++) {
+                list.add(num);
+                num++;
+            }
+//            printCollection("After reinit", list);
+        }
+        long timeConsumed = System.nanoTime() - startTime;
+        System.out.println("LinkedList time consumed: " + timeConsumed);
+        return timeConsumed;
+    }
+
+    public static  void task4(int nPeople) {
+       System.out.println("N = " + nPeople);
+       long timeConsumedArray = task4ArrayList(nPeople);
+       long timeConsumedLinked =  task4LinkedList(nPeople);
+       long min = Math.min(timeConsumedArray, timeConsumedLinked);
+
+       if (min == timeConsumedArray) {
+           System.out.println("ArrayList is faster!");
+       }
+       if (min == timeConsumedLinked) {
+           System.out.println("LinkedList is faster!");
+       }
+    }
+
+    public static void task5(int number) {
+        MyCustomClass myCustomClass = new MyCustomClass();
+        myCustomClass.addInt(5);
+        myCustomClass.addInt(7);
+        myCustomClass.addInt(15);
+        myCustomClass.addInt(100);
+        myCustomClass.addInt(9);
+        myCustomClass.addInt(-8);
+
+        myCustomClass.findNearestInt(number);
+    }
+
+    public static class MyCustomClass {
+
+        ArrayList<Integer> list;
+
+        public MyCustomClass() {
+            this.list = new ArrayList<Integer>();
+        }
+
+        private boolean addInt(int element) {
+            return list.add(element);
+
+        }
+
+        private boolean removeInt(int element) {
+            return list.remove(((Integer) element));
+        }
+
+        private void findNearestInt(int target) {
+            int smallestDifference = Math.abs(list.get(0) - target);
+            int nearestElement = list.get(0);
+            List<Integer> result = new ArrayList<Integer>();
+            result.add(nearestElement);
+             for (int i = 1; i < list.size(); i++) {
+                int dif = Math.abs(list.get(i) - target);
+                if (dif < smallestDifference) {
+                    smallestDifference = dif;
+                    nearestElement = list.get(i);
+                    result.clear();
+                    result.add(nearestElement);
+                }
+
+                if ((dif == smallestDifference) && (nearestElement != list.get(i))) {
+                    result.clear();
+                    result.add(nearestElement);
+                    result.add(list.get(i));
+                }
+            }
+            printCollection("The nearest int: ", result);
+
+        }
     }
 
     private static void printCollection(String comment, Collection collection) {
@@ -157,49 +260,4 @@ public class CollectionsTasks {
             System.out.println(item);
         }
     }
-
-    public static class MyCustomClass {
-
-        ArrayList<Integer> list;
-
-        public MyCustomClass() {
-            this.list = new ArrayList<>();
-        }
-
-        private MyCustomClass addInt(int element) {
-            list.add(element);
-            return this;
-        }
-
-        private MyCustomClass removeInt(int element) {
-            list.remove(((Integer) element));
-            return this;
-        }
-
-        private int[] findNearestInt(int target) {
-            Integer ie = target;
-            int smallestDifference = Math.abs(list.get(0) - target);
-            int nearestElement = list.get(0);
-            int run = 0;
-            int[] result = new int[2];
-             for (int i = 1; i < list.size(); i++) {
-                int dif = Math.abs(list.get(i) - target);
-                if (dif < smallestDifference) {
-                    smallestDifference = dif;
-                    nearestElement = list.get(i);
-                    result = new int[]{nearestElement};
-                }
-
-                if ((dif == smallestDifference) && (nearestElement != list.get(i))) {
-                   result =  new int[]{nearestElement, list.get(i)};
-                }
-            }
-            return result;
-
-        }
-    }
-
-//    TODO: 2, 5
-//    6
-
-    }
+ }
