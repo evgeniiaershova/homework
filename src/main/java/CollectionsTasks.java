@@ -7,7 +7,7 @@ public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
 
-       /* task1();
+        task1();
         task2("'(', ')', '[', ']', '{', '}'");
         task3();
         task4(10);
@@ -15,7 +15,7 @@ public class CollectionsTasks {
         task4(1000);
         task4(10000);
         task4(100000);
-        task5(0);*/
+        task5(0);
 
        task6();
 
@@ -283,9 +283,7 @@ public class CollectionsTasks {
             double x1 = listOfPoints.get(i)[0];
             double y1 = listOfPoints.get(i)[1];
             // взять каждую точку
-            for (int j = 0; j < listOfPoints.size() ; j++) {
-                //кроме нее самой
-                if (j != i) {
+            for (int j = i + 1; j < listOfPoints.size() ; j++) {
                     double x2 = listOfPoints.get(j)[0];
                     double y2 = listOfPoints.get(j)[1];
                     Map<Integer, double[]> map = new HashMap<Integer, double[]>();
@@ -311,7 +309,6 @@ public class CollectionsTasks {
                             System.out.println("M" + en.getKey() + " (" + en.getValue()[0] + "," + en.getValue()[1] + ")");
                         }
                     }
-                }
             }
         }
     }
