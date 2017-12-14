@@ -7,7 +7,7 @@ public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
 
-        task1();
+       /* task1();
         task2("'(', ')', '[', ']', '{', '}'");
         task3();
         task4(10);
@@ -15,7 +15,10 @@ public class CollectionsTasks {
         task4(1000);
         task4(10000);
         task4(100000);
-        task5(0);
+        task5(0);*/
+
+       task6();
+
     }
 
     private static void task1() throws Exception {
@@ -255,7 +258,62 @@ public class CollectionsTasks {
     }
 
     private static void task6() throws OperationNotSupportedException {
-        throw new OperationNotSupportedException("Task 6 ");
+        HashMap<Integer, double[]> listOfPoints = new HashMap<Integer, double[]>();
+        listOfPoints.put(0, new double[]{7,-2});
+        listOfPoints.put(1, new double[]{4,-4});
+        listOfPoints.put(2, new double[]{8,11});
+        listOfPoints.put(3, new double[]{5,4});
+        listOfPoints.put(4, new double[]{-5,8});
+        listOfPoints.put(5, new double[]{-2,5});
+        listOfPoints.put(6, new double[]{-3,3});
+        listOfPoints.put(7, new double[]{-4,-1});
+        listOfPoints.put(8, new double[]{-2,-2});
+        listOfPoints.put(9, new double[]{0,-3});
+        listOfPoints.put(10, new double[]{-6,0});
+
+        //для каждой точки взять каждую точку не включая саму точку
+        // составить уравнение прямой
+        // и еще раз пройти по каждой точке, не включая 2 текущие и проверить, есть ли еще точки, которые
+        //удовлетворяют этому уравнению
+        // если такие точки есть, вывести все точки (2 исходные и удовлетворяющие уравнению прямой)
+        //(x - x1) / (x2 - x1) = (y - y1)/ (y2 - y1);
+
+        //для каждой точки из списка
+        for (int i = 0; i < listOfPoints.size(); i++) {
+            double x1 = listOfPoints.get(i)[0];
+            double y1 = listOfPoints.get(i)[1];
+            // взять каждую точку
+            for (int j = 0; j < listOfPoints.size() ; j++) {
+                //кроме нее самой
+                if (j != i) {
+                    double x2 = listOfPoints.get(j)[0];
+                    double y2 = listOfPoints.get(j)[1];
+                    Map<Integer, double[]> map = new HashMap<Integer, double[]>();
+                    // и еще раз пройти по каждой точке, не включая 2 текущие
+                    for (int n = 0; n < listOfPoints.size(); n ++ ) {
+                        if ((n != i) && (n != j)) {
+                            double x = listOfPoints.get(n)[0];
+                            double y = listOfPoints.get(n)[1];
+                            double left = (x - x1) / (x2 - x1);
+                            double right = (y - y1)/ (y2 - y1);
+                            // и проверить, удовлетворяют ли точки x и y уравнению прямой
+                            if ((left == right) && (left != 0.0)){
+                               map.put(n, new double[]{x, y});
+                            }
+                        }
+                    }
+                    if (map.size() > 0) {
+                        System.out.println("For a line which crosses two points: ");
+                        System.out.println("M" + i + "(" + x1 + "," + y1 + ")");
+                        System.out.println("M" + j + "(" + x2 + "," + y2 + ")");
+                        System.out.println("There are more points: ");
+                        for (Map.Entry<Integer, double[]> en: map.entrySet()) {
+                            System.out.println("M" + en.getKey() + " (" + en.getValue()[0] + "," + en.getValue()[1] + ")");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private static void printCollection(String comment, Collection collection) {
@@ -264,4 +322,5 @@ public class CollectionsTasks {
             System.out.println(item);
         }
     }
+
  }
