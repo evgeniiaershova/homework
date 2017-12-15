@@ -313,6 +313,29 @@ public class CollectionsTasks {
         }
     }
 
+//    8.	На плоскости задано N отрезков. Найти точку пересечения двух отрез¬ков, имеющую минимальную абсциссу.
+// Использовать класс TreeMap.
+    private static void task8() throws OperationNotSupportedException {
+        Map<Integer, double[][]> listOfLines = new TreeMap<>();
+        listOfLines.put(0, new double[][]{{-4, 1},{5, 7}});
+        listOfLines.put(1, new double[][]{{-2,-7},{4, 1}});
+        listOfLines.put(2, new double[][]{{5,7},{4, 1}});
+        listOfLines.put(3, new double[][]{{-4,1},{-2, -7}});
+
+        for (int i = 0; i < listOfLines.size(); i++) {
+
+        }
+
+        throw new OperationNotSupportedException("task 8 has not been implemented yet!");
+
+        // составить пары линий каждой с каждой
+        // найти точки пересечения: выбрать только те линии, у которых только одна точка пересечения
+        // найти наименьшую x
+
+
+
+    }
+
     private static void printCollection(String comment, Collection collection) {
         System.out.println(comment);
         for (Object item : collection) {
