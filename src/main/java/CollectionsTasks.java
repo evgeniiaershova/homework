@@ -8,7 +8,7 @@ public class CollectionsTasks {
     public static void main(String[] args) throws Exception {
 
         task1();
-        task2("'(', ')', '[', ']', '{', '}'");
+        task2("'}(', ')', '[', ']', '{', '}{[]}'");
         task3();
         task4(10);
         task4(100);
@@ -17,7 +17,7 @@ public class CollectionsTasks {
         task4(100000);
         task5(0);
 
-       task6();
+        task6();
 
     }
 
@@ -57,46 +57,61 @@ public class CollectionsTasks {
 
     private static void task2(String initialString) {
         List<String> br = Arrays.asList(initialString.replaceAll("[', ]", "").split(""));
-        Collections.reverse(br);
 
-        Stack<String> stack = new Stack<String>();
-        for (String bracket: br) {
-            stack.push(bracket);
+        Stack<String> closingBracketsStack = new Stack<String>();
+
+        String bracket = br.get(0);
+
+        if (!(bracket.equals("(") || bracket.equals("[") || bracket.equals("{"))) {
+            throw new AssertionError("Wrong bracket, expected any opening bracket, but got: " + bracket);
         }
 
-        while (!stack.empty()) {
-            String brOpen = stack.pop();
-            String expected = "";
-                switch (brOpen) {
+        for (int i = 0; i < br.size(); i++) {
+            if (!(br.size() % 2 == 0)) {
+                throw new AssertionError("Number of brackets is not even. So, the string is not correct.");
+            } else {
+                bracket = br.get(i);
+                String brFromStack;
+                switch (bracket) {
                     case "(":
-                            expected = ")";
-                            checkBracket(stack, expected, brOpen);
+                        closingBracketsStack.push(")");
+                        break;
+                    case ")":
+                        checkBracket(closingBracketsStack, bracket, initialString);
                         break;
                     case "[":
-                            expected = "]";
-                            checkBracket(stack, expected, brOpen);
+                        closingBracketsStack.push("]");
+                        break;
+                    case "]":
+                        checkBracket(closingBracketsStack, bracket, initialString);
                         break;
                     case "{":
-                            expected = "}";
-                            checkBracket(stack, expected, brOpen);
+                        closingBracketsStack.push("}");
                         break;
-                    default:
-                        throw new AssertionError("Character should be opening bracket, but was " + brOpen);
+                    case "}":
+                        checkBracket(closingBracketsStack, bracket, initialString);
+                        break;
                 }
             }
         }
 
-    private static void checkBracket(Stack<String> stack, String expected, String brOpen) {
-        if (!stack.empty()) {
-           String brClose = stack.pop();
-            if (!brClose.equals(expected)) {
-                throw new AssertionError("Wrong bracket after " + brOpen +
-                        ". Bracket should be " + expected + ", but was " + brClose);
+        if (!closingBracketsStack.empty()) {
+            System.out.println("======");
+            while (!closingBracketsStack.empty()) {
+                System.out.println(closingBracketsStack.pop());
             }
-        } else {
-            throw new AssertionError("There's opening bracket: " + brOpen
-                    + ", but closing bracket is missing.");
+            throw new AssertionError("The stack should be empty, but it not. ");
         }
+    }
+
+    private static void checkBracket(Stack<String> closingBracketsStack, String bracket, String initialString) {
+        if (!closingBracketsStack.empty()) {
+            String brFromStack = closingBracketsStack.pop();
+            if (!bracket.equals(brFromStack)) {
+                throw new AssertionError("Wrong bracket, expected:" + brFromStack + ", but got: " + bracket);
+            }
+        } else throw new AssertionError("Closing bracket " + bracket + " is not expected here:  " + initialString);
+
     }
 
     private static void task3() throws Exception {
