@@ -6,6 +6,7 @@ import java.util.*;
 public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
+/*
 
         task1();
         task2("'}(', ')', '[', ']', '{', '}{[]}'");
@@ -16,9 +17,9 @@ public class CollectionsTasks {
         task4(10000);
         task4(100000);
         task5(0);
-
         task6();
-
+*/
+        task8();
     }
 
     private static void task1() throws Exception {
@@ -262,8 +263,6 @@ public class CollectionsTasks {
                 }
 
                 if ((dif == smallestDifference) && (nearestElement != list.get(i))) {
-                    result.clear();
-                    result.add(nearestElement);
                     result.add(list.get(i));
                 }
             }
@@ -272,7 +271,7 @@ public class CollectionsTasks {
         }
     }
 
-    private static void task6() throws OperationNotSupportedException {
+    private static void task6() {
         HashMap<Integer, double[]> listOfPoints = new HashMap<Integer, double[]>();
         listOfPoints.put(0, new double[]{7,-2});
         listOfPoints.put(1, new double[]{4,-4});
@@ -286,14 +285,7 @@ public class CollectionsTasks {
         listOfPoints.put(9, new double[]{0,-3});
         listOfPoints.put(10, new double[]{-6,0});
 
-        //для каждой точки взять каждую точку не включая саму точку
-        // составить уравнение прямой
-        // и еще раз пройти по каждой точке, не включая 2 текущие и проверить, есть ли еще точки, которые
-        //удовлетворяют этому уравнению
-        // если такие точки есть, вывести все точки (2 исходные и удовлетворяющие уравнению прямой)
-        //(x - x1) / (x2 - x1) = (y - y1)/ (y2 - y1);
-
-        //для каждой точки из списка
+          //для каждой точки из списка
         for (int i = 0; i < listOfPoints.size(); i++) {
             double x1 = listOfPoints.get(i)[0];
             double y1 = listOfPoints.get(i)[1];
@@ -331,24 +323,85 @@ public class CollectionsTasks {
 //    8.	На плоскости задано N отрезков. Найти точку пересечения двух отрез¬ков, имеющую минимальную абсциссу.
 // Использовать класс TreeMap.
     private static void task8() throws OperationNotSupportedException {
-        Map<Integer, double[][]> listOfLines = new TreeMap<>();
-        listOfLines.put(0, new double[][]{{-4, 1},{5, 7}});
-        listOfLines.put(1, new double[][]{{-2,-7},{4, 1}});
-        listOfLines.put(2, new double[][]{{5,7},{4, 1}});
-        listOfLines.put(3, new double[][]{{-4,1},{-2, -7}});
+        Map<Integer, double[][]> listOfLines = new HashMap<>();
+        listOfLines.put(0, new double[][]{{5.0, -2.0},{1.0, -4.0}});
+        listOfLines.put(1, new double[][]{{5.0,-4.0},{1.0, -6.0}});
+        listOfLines.put(2, new double[][]{{2.0,1.0},{2.0, 4.0}});
+        listOfLines.put(3, new double[][]{{-4.0,1.0},{-2.0, -7.0}});
 
-        for (int i = 0; i < listOfLines.size(); i++) {
+        HashSet<double[]> points = new HashSet<double[]>();
+        // составить пересечение каждой линии с каждой
+        for (int i = 0; i < listOfLines.size(); i ++) {
+            double ax1 = listOfLines.get(i)[0][0];
+            double ay1 = listOfLines.get(i)[0][1];
+            double ax2 = listOfLines.get(i)[1][0];
+            double ay2 = listOfLines.get(i)[1][1];
+            for (int j = i + 1; j < listOfLines.size(); j ++) {
+                double bx1 = listOfLines.get(j)[0][0];
+                double by1 = listOfLines.get(j)[0][1];
+                double bx2 = listOfLines.get(j)[1][0];
+                double by2 = listOfLines.get(j)[1][1];
 
+
+                double[] intersection = findIntersection(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
+                if (intersection != null) {
+                    System.out.println("INFO: " + intersection[0] +  " " +  intersection[1]);
+                } else System.out.println("No intersections");
+            }
+        }
+    }
+
+    private static double []findIntersection(double ax1,double ay1, double ax2, double ay2,
+                                         double bx1, double by1, double bx2, double by2) {
+
+
+        double A1 = ay1 - ay2;
+//        System.out.println("A1 " + A1);
+        double B1 = ax2 - ax1;
+//        System.out.println("B1 " + B1);
+
+        double C1 = ax1*ay2 - ax2*ay1;
+//        System.out.println("C1 " + C1);
+
+        double A2 = by1 - by2;
+//        System.out.println("A2 " + A2);
+
+        double B2 = bx2 - bx1;
+//        System.out.println("B2 " + B2);
+
+        double C2 = bx1*by2 - bx2*by1;
+//        System.out.println("C2 " + C2);
+
+
+        double denominator = A1*B2 - A2*B1;
+//        System.out.println("den:" + denominator);
+        if (denominator == 0) {
+            return null;
         }
 
-        throw new OperationNotSupportedException("task 8 has not been implemented yet!");
+        double x = -(C1*B2 - C2*B1)/denominator;
+        double y = -(A1*C2 - A2*C1)/denominator;
+        System.out.println("x=" + x );
+        System.out.println("y=" + y );
+        System.out.println("ax1=" +ax1);
+        System.out.println("ay1=" +ay1);
+        System.out.println("ax2=" +ax2);
+        System.out.println("ay2=" +ay2);
+        System.out.println("bx1=" +bx1);
+        System.out.println("by1=" +by1);
+        System.out.println("bx2=" +bx2);
+        System.out.println("by2=" +by2);
 
-        // составить пары линий каждой с каждой
-        // найти точки пересечения: выбрать только те линии, у которых только одна точка пересечения
-        // найти наименьшую x
+        return new double[]{x, y};
 
-
-
+      /*  if (    (x <= ax1) && (x >= ax2) &&
+                (x <= bx1) && (x >= bx2) &&
+                (y <= ay1) && (y >= ay2) &&
+                (y <= by1) && (y >= by2)) {
+            return new double[]{x, y};
+        } else {
+            return null;
+        }*/
     }
 
     private static void printCollection(String comment, Collection collection) {
