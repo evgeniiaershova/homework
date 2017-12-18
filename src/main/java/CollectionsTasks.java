@@ -5,8 +5,6 @@ import java.util.*;
 public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
-/*
-
         task1();
         task2("'}(', ')', '[', ']', '{', '}{[]}'");
         task3();
@@ -17,7 +15,6 @@ public class CollectionsTasks {
         task4(100000);
         task5(0);
         task6();
-*/
         task8();
     }
 
@@ -284,6 +281,7 @@ public class CollectionsTasks {
         listOfPoints.put(9, new double[]{0,-3});
         listOfPoints.put(10, new double[]{-6,0});
 
+        HashSet<ArrayList<Integer>> set = new HashSet<>() ;
           //для каждой точки из списка
         for (int i = 0; i < listOfPoints.size(); i++) {
             double x1 = listOfPoints.get(i)[0];
@@ -292,7 +290,7 @@ public class CollectionsTasks {
             for (int j = i + 1; j < listOfPoints.size() ; j++) {
                     double x2 = listOfPoints.get(j)[0];
                     double y2 = listOfPoints.get(j)[1];
-                    Map<Integer, double[]> map = new HashMap<Integer, double[]>();
+                    ArrayList<Integer> pullOfDots = new ArrayList<>();
                     // и еще раз пройти по каждой точке, не включая 2 текущие
                     for (int n = 0; n < listOfPoints.size(); n ++ ) {
                         if ((n != i) && (n != j)) {
@@ -302,25 +300,30 @@ public class CollectionsTasks {
                             double right = (y - y1)/ (y2 - y1);
                             // и проверить, удовлетворяют ли точки x и y уравнению прямой
                             if ((left == right) && (left != 0.0)){
-                               map.put(n, new double[]{x, y});
+                               pullOfDots.add(n);
                             }
                         }
                     }
-                    if (map.size() > 0) {
-                        System.out.println("For a line which crosses two points: ");
-                        System.out.println("M" + i + "(" + x1 + "," + y1 + ")");
-                        System.out.println("M" + j + "(" + x2 + "," + y2 + ")");
-                        System.out.println("There are more points: ");
-                        for (Map.Entry<Integer, double[]> en: map.entrySet()) {
-                            System.out.println("M" + en.getKey() + " (" + en.getValue()[0] + "," + en.getValue()[1] + ")");
-                        }
+                    if (!pullOfDots.isEmpty()) {
+                        pullOfDots.add(i);
+                        pullOfDots.add(j);
+                        Collections.sort(pullOfDots);
+                        set.add(pullOfDots);
                     }
+            }
+        }
+
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()) {
+            System.out.println("The following dots lay on one line: ");
+            ArrayList<Integer> arrayList = (ArrayList<Integer>) iterator.next();
+            for (Integer integer: arrayList) {
+                System.out.println(integer + " (" + listOfPoints.get(integer)[0] + ", " + listOfPoints.get(integer)[1] + ")");
             }
         }
     }
 
-//    8.	На плоскости задано N отрезков. Найти точку пересечения двух отрез¬ков, имеющую минимальную абсциссу.
-// Использовать класс TreeMap.
+
     private static void task8() {
         Map<Integer, double[][]> listOfLines = new HashMap<>();
         listOfLines.put(0, new double[][]{{5.0, -2.0}, {1.0, -4.0}});
@@ -328,43 +331,46 @@ public class CollectionsTasks {
         listOfLines.put(2, new double[][]{{2.0, 1.0}, {2.0, -4.0}});
         listOfLines.put(3, new double[][]{{-4.0, 1.0}, {-2.0, -7.0}});
         listOfLines.put(4, new double[][]{{4.0, -3.0}, {2.0, -7.0}});
+        listOfLines.put(5, new double[][]{{1.0, -5.0}, {1.0, -8.0}});
 
         TreeMap<double[], Integer[]> points = new TreeMap<>(new Comparator<double[]>() {
-           @Override
-           public int compare(double[] o1, double[] o2) {
-               if (o1[0] < o2[0]) {
-                   return -1;
-               }
-               if (o1[0] == o2[0]) {
-                   return 0;
-               }
-               else return 1;
-           }
+            @Override
+            public int compare(double[] o1, double[] o2) {
+                if (o1[0] < o2[0]) {
+                    return -1;
+                }
+                if (o1[0] == o2[0]) {
+                    return 0;
+                } else return 1;
+            }
         });
 
-            // составить пересечение каждой линии с каждой
-        for (int i = 0; i<listOfLines.size();i ++) {
-                double ax1 = listOfLines.get(i)[0][0];
-                double ay1 = listOfLines.get(i)[0][1];
-                double ax2 = listOfLines.get(i)[1][0];
-                double ay2 = listOfLines.get(i)[1][1];
-                for (int j = i + 1; j < listOfLines.size(); j++) {
-                    double bx1 = listOfLines.get(j)[0][0];
-                    double by1 = listOfLines.get(j)[0][1];
-                    double bx2 = listOfLines.get(j)[1][0];
-                    double by2 = listOfLines.get(j)[1][1];
+        for (int i = 0; i < listOfLines.size(); i++) {
+            double ax1 = listOfLines.get(i)[0][0];
+            double ay1 = listOfLines.get(i)[0][1];
+            double ax2 = listOfLines.get(i)[1][0];
+            double ay2 = listOfLines.get(i)[1][1];
+            for (int j = i + 1; j < listOfLines.size(); j++) {
+                double bx1 = listOfLines.get(j)[0][0];
+                double by1 = listOfLines.get(j)[0][1];
+                double bx2 = listOfLines.get(j)[1][0];
+                double by2 = listOfLines.get(j)[1][1];
 
-                    double[] intersection = findIntersection(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
-                    if (intersection != null) {
-                       /* System.out.println("Intersection for segments " + i + " and " + j + "" +
-                                " is point (" + intersection[0] + "," + intersection[1] + ")");*/
-                        points.put(intersection, new Integer[]{i, j});
-                    } /*else System.out.println("No intersections");*/
+                double[] intersection = findIntersection(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
+                if (intersection != null) {
+                    points.put(intersection, new Integer[]{i, j});
                 }
             }
-
-        System.out.println(points.firstEntry().getKey()[0] + ", " + points.firstEntry().getKey()[1]);
         }
+        if (!points.isEmpty()) {
+            Map.Entry<double[], Integer[]> entry = points.firstEntry();
+            System.out.println("Intersection of lines " + entry.getValue()[0]
+                    + " and " + entry.getValue()[1] + " has the smallest X: (" + entry.getKey()[0] + ", " + entry.getKey()[1] + ")");
+        } else {
+            System.out.println("The lines have no intersections");
+        }
+
+    }
 
         private static double[] findIntersection ( double ax1, double ay1, double ax2, double ay2,
         double bx1, double by1, double bx2, double by2){
