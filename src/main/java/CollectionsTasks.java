@@ -1,4 +1,3 @@
-import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -322,86 +321,135 @@ public class CollectionsTasks {
 
 //    8.	На плоскости задано N отрезков. Найти точку пересечения двух отрез¬ков, имеющую минимальную абсциссу.
 // Использовать класс TreeMap.
-    private static void task8() throws OperationNotSupportedException {
+    private static void task8() {
         Map<Integer, double[][]> listOfLines = new HashMap<>();
-        listOfLines.put(0, new double[][]{{5.0, -2.0},{1.0, -4.0}});
-        listOfLines.put(1, new double[][]{{5.0,-4.0},{1.0, -6.0}});
-        listOfLines.put(2, new double[][]{{2.0,1.0},{2.0, 4.0}});
-        listOfLines.put(3, new double[][]{{-4.0,1.0},{-2.0, -7.0}});
+        listOfLines.put(0, new double[][]{{5.0, -2.0}, {1.0, -4.0}});
+        listOfLines.put(1, new double[][]{{5.0, -4.0}, {1.0, -6.0}});
+        listOfLines.put(2, new double[][]{{2.0, 1.0}, {2.0, -4.0}});
+        listOfLines.put(3, new double[][]{{-4.0, 1.0}, {-2.0, -7.0}});
+        listOfLines.put(4, new double[][]{{4.0, -3.0}, {2.0, -7.0}});
 
-        HashSet<double[]> points = new HashSet<double[]>();
-        // составить пересечение каждой линии с каждой
-        for (int i = 0; i < listOfLines.size(); i ++) {
-            double ax1 = listOfLines.get(i)[0][0];
-            double ay1 = listOfLines.get(i)[0][1];
-            double ax2 = listOfLines.get(i)[1][0];
-            double ay2 = listOfLines.get(i)[1][1];
-            for (int j = i + 1; j < listOfLines.size(); j ++) {
-                double bx1 = listOfLines.get(j)[0][0];
-                double by1 = listOfLines.get(j)[0][1];
-                double bx2 = listOfLines.get(j)[1][0];
-                double by2 = listOfLines.get(j)[1][1];
+        TreeMap<double[], Integer[]> points = new TreeMap<>(new Comparator<double[]>() {
+           @Override
+           public int compare(double[] o1, double[] o2) {
+               if (o1[0] < o2[0]) {
+                   return -1;
+               }
+               if (o1[0] == o2[0]) {
+                   return 0;
+               }
+               else return 1;
+           }
+        });
 
+            // составить пересечение каждой линии с каждой
+        for (int i = 0; i<listOfLines.size();i ++) {
+                double ax1 = listOfLines.get(i)[0][0];
+                double ay1 = listOfLines.get(i)[0][1];
+                double ax2 = listOfLines.get(i)[1][0];
+                double ay2 = listOfLines.get(i)[1][1];
+                for (int j = i + 1; j < listOfLines.size(); j++) {
+                    double bx1 = listOfLines.get(j)[0][0];
+                    double by1 = listOfLines.get(j)[0][1];
+                    double bx2 = listOfLines.get(j)[1][0];
+                    double by2 = listOfLines.get(j)[1][1];
 
-                double[] intersection = findIntersection(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
-                if (intersection != null) {
-                    System.out.println("INFO: " + intersection[0] +  " " +  intersection[1]);
-                } else System.out.println("No intersections");
+                    double[] intersection = findIntersection(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
+                    if (intersection != null) {
+                       /* System.out.println("Intersection for segments " + i + " and " + j + "" +
+                                " is point (" + intersection[0] + "," + intersection[1] + ")");*/
+                        points.put(intersection, new Integer[]{i, j});
+                    } /*else System.out.println("No intersections");*/
+                }
             }
+
+        System.out.println(points.firstEntry().getKey()[0] + ", " + points.firstEntry().getKey()[1]);
         }
-    }
 
-    private static double []findIntersection(double ax1,double ay1, double ax2, double ay2,
-                                         double bx1, double by1, double bx2, double by2) {
-
-
-        double A1 = ay1 - ay2;
+        private static double[] findIntersection ( double ax1, double ay1, double ax2, double ay2,
+        double bx1, double by1, double bx2, double by2){
+            double A1 = ay1 - ay2;
 //        System.out.println("A1 " + A1);
-        double B1 = ax2 - ax1;
+            double B1 = ax2 - ax1;
 //        System.out.println("B1 " + B1);
 
-        double C1 = ax1*ay2 - ax2*ay1;
+            double C1 = ax1 * ay2 - ax2 * ay1;
 //        System.out.println("C1 " + C1);
 
-        double A2 = by1 - by2;
+            double A2 = by1 - by2;
 //        System.out.println("A2 " + A2);
 
-        double B2 = bx2 - bx1;
+            double B2 = bx2 - bx1;
 //        System.out.println("B2 " + B2);
 
-        double C2 = bx1*by2 - bx2*by1;
+            double C2 = bx1 * by2 - bx2 * by1;
 //        System.out.println("C2 " + C2);
 
-
-        double denominator = A1*B2 - A2*B1;
+            double denominator = A1 * B2 - A2 * B1;
 //        System.out.println("den:" + denominator);
-        if (denominator == 0) {
-            return null;
+            if (denominator == 0) {
+                return null;
+            }
+
+            double x = -(C1 * B2 - C2 * B1) / denominator;
+            double y = -(A1 * C2 - A2 * C1) / denominator;
+
+            if (checkIfPointBelongsToSegment(x, y,
+                    ax1, ax2, ay1, ay2,
+                    bx1, bx2, by1, by2)) {
+                return new double[]{x, y};
+            } else {
+                return null;
+            }
         }
 
-        double x = -(C1*B2 - C2*B1)/denominator;
-        double y = -(A1*C2 - A2*C1)/denominator;
-        System.out.println("x=" + x );
-        System.out.println("y=" + y );
+    private static boolean checkIfPointBelongsToSegment(double x, double y,
+                                                        double ax1, double ax2, double ay1, double ay2,
+                                                        double bx1, double bx2, double by1, double by2) {
+        boolean belongsToASegmentX = false;
+        boolean belongsToASegmentY = false;
+        boolean belongsToBSegmentX = false;
+        boolean belongsToBSegmentY = false;
+  /*      System.out.println("x=" + x );
+        System.out.println("y=" + y );*/
+        if (((ax1 <= x) && (x <= ax2)) || ((ax2 <= x) && (x <= ax1))) {
+            belongsToASegmentX = true;
+        }
+      /*  System.out.println("belongs to ax: " + belongsToASegmentX);
         System.out.println("ax1=" +ax1);
-        System.out.println("ay1=" +ay1);
         System.out.println("ax2=" +ax2);
-        System.out.println("ay2=" +ay2);
+*/
+        if (((ay1 <= y) && (y <= ay2)) || ((ay2 <= y) && (y <= ay1))) {
+            belongsToASegmentY = true;
+        }
+    /*    System.out.println(ay1 + " <= " + y + " = " + (ay1 <= y));
+        System.out.println(y + " <= " + ay2 + " = " + (y <= ay2));
+        System.out.println(ay2 + " <= " + y +" = " + (ay2 <= y));
+        System.out.println(y  + "<= " + ay2 + " = " + (y <= ay2));
+
+        System.out.println("belongs to ay: " + belongsToASegmentY);
+        System.out.println("ay1=" +ay1);
+        System.out.println("ay2=" +ay2);*/
+
+        if (((bx1 <= x) && (x <= bx2)) || ((bx2 <= x) && (x <= bx1))) {
+            belongsToBSegmentX = true;
+        }
+       /* System.out.println("belongs to bx: " + belongsToBSegmentX);
         System.out.println("bx1=" +bx1);
-        System.out.println("by1=" +by1);
         System.out.println("bx2=" +bx2);
-        System.out.println("by2=" +by2);
+*/
+        if (((by1 <= y) && (y <= by2)) || ((by2 <= y) && (y <= by1))) {
+            belongsToBSegmentY = true;
+        }
+      /*  System.out.println("belongs to by: " + belongsToBSegmentY);
+        System.out.println("by1=" + by1);
+        System.out.println("by2=" + by2);*/
 
-        return new double[]{x, y};
-
-      /*  if (    (x <= ax1) && (x >= ax2) &&
-                (x <= bx1) && (x >= bx2) &&
-                (y <= ay1) && (y >= ay2) &&
-                (y <= by1) && (y >= by2)) {
-            return new double[]{x, y};
+        if (belongsToASegmentX && belongsToASegmentY && belongsToBSegmentX && belongsToBSegmentY) {
+            return true;
         } else {
-            return null;
-        }*/
+            return false;
+        }
     }
 
     private static void printCollection(String comment, Collection collection) {
@@ -410,5 +458,5 @@ public class CollectionsTasks {
             System.out.println(item);
         }
     }
+}
 
- }
