@@ -290,7 +290,7 @@ public class CollectionsTasks {
             for (int j = i + 1; j < listOfPoints.size() ; j++) {
                     double x2 = listOfPoints.get(j)[0];
                     double y2 = listOfPoints.get(j)[1];
-                    ArrayList<Integer> pullOfDots = new ArrayList<>();
+                    ArrayList<Integer> poolOfDots = new ArrayList<>();
                     // и еще раз пройти по каждой точке, не включая 2 текущие
                     for (int n = 0; n < listOfPoints.size(); n ++ ) {
                         if ((n != i) && (n != j)) {
@@ -300,15 +300,15 @@ public class CollectionsTasks {
                             double right = (y - y1)/ (y2 - y1);
                             // и проверить, удовлетворяют ли точки x и y уравнению прямой
                             if ((left == right) && (left != 0.0)){
-                               pullOfDots.add(n);
+                               poolOfDots.add(n);
                             }
                         }
                     }
-                    if (!pullOfDots.isEmpty()) {
-                        pullOfDots.add(i);
-                        pullOfDots.add(j);
-                        Collections.sort(pullOfDots);
-                        set.add(pullOfDots);
+                    if (!poolOfDots.isEmpty()) {
+                        poolOfDots.add(i);
+                        poolOfDots.add(j);
+                        Collections.sort(poolOfDots);
+                        set.add(poolOfDots);
                     }
             }
         }
@@ -457,6 +457,14 @@ public class CollectionsTasks {
             return false;
         }
     }
+//    7.На клетчатой бумаге в произвольном месте (x0, y0) нарисован круг радиуса R.
+// Вывести в файл описания всех клеток, целиком лежащих внутри круга,
+// в порядке возрастания расстояния от клетки до центра круга.
+// Использовать класс PriorityQueue и интерфейс Comparable
+    public static void task7() {
+
+    }
+
 
     private static void printCollection(String comment, Collection collection) {
         System.out.println(comment);
