@@ -1,19 +1,9 @@
 package patterns.factory;
 
-import patterns.entities.Limits;
 import patterns.entities.Plan;
 
 public abstract class Product {
     private double price = 0;
-    private Limits limits = null;
-
-    public void setLimits(Limits limits) {
-        this.limits = limits;
-    }
-
-    public Limits getLimits() {
-        return limits;
-    }
 
     public void setPrice(Plan plan) {
         switch (plan) {

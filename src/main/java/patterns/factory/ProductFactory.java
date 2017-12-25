@@ -4,9 +4,9 @@ import patterns.entities.Plan;
 
 public abstract class ProductFactory {
 
-    Product product = createProduct();
+    Product product ;
 
-    protected abstract Product createProduct();
+    public abstract Product createProduct();
 
     private void goToCreateProductPage() {
         System.out.println("CreateProductPage createProductPage = new CreateProductPage();");

@@ -10,6 +10,8 @@ public class UserBuysProduct {
 
     @Test(dataProvider = "getData")
     public void buyStandardProduct(ProductFactory productFactory) {
+        productFactory.createProduct();
+
         productFactory.generateInUi(Plan.PRO);
         productFactory.activate();
         productFactory.checkPayment();
@@ -38,10 +40,6 @@ public class UserBuysProduct {
     // если продукт Промо, то цена должна быть (getPlan), а сумма платежа 0.00
     // если продукт Стандарт, то цена должна быть (getPlan), и сумма getPlan
     // если Триал, то цена должна быть getPlan, а сумма, getTrialPrice
-
-// проверяем лимииты:
-    // если Промо, то стандартные лимиты, кроме АПИ
-    // если Стандарт и Промо, то стандартные лимиты
 
 
 }
