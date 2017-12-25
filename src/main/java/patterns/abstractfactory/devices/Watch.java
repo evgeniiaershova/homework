@@ -6,4 +6,5 @@ public interface Watch {
 
     public void connect();
     public void synchronize();
+    public void synchronizeWithSmart(Smartphone smartphone);
 }

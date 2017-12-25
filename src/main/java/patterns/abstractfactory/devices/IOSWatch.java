@@ -19,4 +19,9 @@ public class IOSWatch implements Watch {
         System.out.println("IOS Watch synchronized");
 
     }
+
+    @Override
+    public void synchronizeWithSmart(Smartphone smartphone) {
+
+    }
 }

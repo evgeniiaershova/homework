@@ -16,4 +16,9 @@ public class AndroidWatch implements Watch {
     public void synchronize() {
         System.out.println("Android Watch synchronized");
     }
+
+    @Override
+    public void synchronizeWithSmart(Smartphone smartphone) {
+
+    }
 }
