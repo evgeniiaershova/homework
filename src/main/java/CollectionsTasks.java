@@ -5,7 +5,7 @@ import java.util.*;
 public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
-        task1();
+       /* task1();
         task2("'}(', ')', '[', ']', '{', '}{[]}'");
         task3();
         task4(10);
@@ -14,8 +14,9 @@ public class CollectionsTasks {
         task4(10000);
         task4(100000);
         task5(0);
-        task6();
-        task8();
+        task6();*/
+        task7();
+//        task8();
     }
 
     private static void task1() throws Exception {
@@ -462,7 +463,27 @@ public class CollectionsTasks {
 // в порядке возрастания расстояния от клетки до центра круга.
 // Использовать класс PriorityQueue и интерфейс Comparable
     public static void task7() {
+        System.out.println("Please enter a double for radius: ");
+//        Scanner scanner = new Scanner(System.in);
+//        double radius = scanner.nextDouble();
+        double radius = 3.8;
 
+        System.out.println("Please enter two points for the center of the circle: ");
+        Scanner scanner = new Scanner(System.in);
+    /*    double x = scanner.nextDouble();
+        double y = scanner.nextDouble();*/
+        double xCenter = 5.0;
+        double yCenter = 4.0;
+
+        int xMin = (int) Math.ceil(xCenter - radius);
+        int xMax = (int) Math.floor(xCenter + radius);
+        int yMin = (int) Math.ceil(yCenter - radius);
+        int yMax = (int) Math.floor(yCenter + radius);
+
+        int x1 = xMin;
+        int y1 = yMin;
+
+        
     }
 
 
