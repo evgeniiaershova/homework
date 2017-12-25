@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class CollectionsTasks {
@@ -462,29 +464,136 @@ public class CollectionsTasks {
 // Вывести в файл описания всех клеток, целиком лежащих внутри круга,
 // в порядке возрастания расстояния от клетки до центра круга.
 // Использовать класс PriorityQueue и интерфейс Comparable
+
+    public static class Cell implements Comparable {
+        public static double[] circleCenter;
+        public double[] cellCenter;
+
+        public static void setCircleCenter(double[] center) {
+            circleCenter = center;
+        }
+
+        public Cell(double[] cellCenter) {
+            this.cellCenter = cellCenter;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            Cell obj = (Cell) o;
+            double thisDistance = findDistance(cellCenter[0], circleCenter[0], cellCenter[1], circleCenter[1]);
+            double oDistance = findDistance(obj.cellCenter[0], circleCenter[0], obj.cellCenter[1], circleCenter[1]);
+            if (thisDistance < oDistance) {
+                return -1;
+            }
+            if (thisDistance > oDistance) {
+                return 1;
+            }
+            else return 0;
+        }
+    }
+
     public static void task7() {
-        System.out.println("Please enter a double for radius: ");
-//        Scanner scanner = new Scanner(System.in);
-//        double radius = scanner.nextDouble();
+     /*   System.out.println("Please enter a double for radius: ");
+        Scanner scanner = new Scanner(System.in);
+        double radius = scanner.nextDouble();*/
         double radius = 3.8;
 
-        System.out.println("Please enter two points for the center of the circle: ");
-        Scanner scanner = new Scanner(System.in);
-    /*    double x = scanner.nextDouble();
-        double y = scanner.nextDouble();*/
+      /*  System.out.println("Please a double for Xo: ");
+        Scanner scanner1 = new Scanner(System.in);
+        double xCenter = scanner1.nextDouble();
+        System.out.println("Please a double for Yo: ");
+        double yCenter = scanner1.nextDouble();*/
         double xCenter = 5.0;
         double yCenter = 4.0;
 
-        int xMin = (int) Math.ceil(xCenter - radius);
-        int xMax = (int) Math.floor(xCenter + radius);
-        int yMin = (int) Math.ceil(yCenter - radius);
-        int yMax = (int) Math.floor(yCenter + radius);
+        double xMin = (int) Math.ceil(xCenter - radius);
+        double xMax = (int) Math.floor(xCenter + radius);
+        double yMin = (int) Math.ceil(yCenter - radius);
+        double yMax = (int) Math.floor(yCenter + radius);
 
-        int x1 = xMin;
-        int y1 = yMin;
+        double x1 = xMin;
+        double y1 = yMin;
 
-        
+        PriorityQueue<Cell> queue = new PriorityQueue<>();
+
+        for (int i = 0; (x1 + i) <= xMax; i++) {
+            x1 = x1 + i;
+            for (int j = 0; (y1 + j <= yMax); j ++){
+                y1 = y1 + j;
+                double distance = findDistance(x1, xCenter, y1, yCenter);
+                if (dotBelongsToCircle(distance, radius)) {
+                    double[] dot2 = new double[]{x1 + 1, y1};
+                    double[] dot3 = new double[]{x1, y1 + 1};
+                    double[] dot4 = new double[]{x1 + 1, y1 + 1};
+                    Cell cell = findCellCenterCoordinates(new double[] {x1, y1}, dot2, dot3, dot4, xCenter, yCenter, radius);
+                    cell.setCircleCenter(new double[]{xCenter, yCenter});
+                    if (cell != null) {
+                        queue.add(cell);
+                    }
+                }
+                y1 = yMin;
+            }
+            y1 = yMin;
+            x1 = xMin;
+        }
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("priority-queue.txt", "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            System.out.println("Could not create file \"priority-queue.txt\"!");
+            ex.printStackTrace();
+        }
+        try {
+            Iterator iterator = queue.iterator();
+            while (iterator.hasNext()) {
+                Cell cell = (Cell) iterator.next();
+                double[] cellCenter = cell.cellCenter;
+                writer.println("(" + cellCenter[0] + ", " + cellCenter[1] + ")");
+            }
+            writer.println("Number of cells: " + queue.size());
+            writer.close();
+        } catch (NullPointerException npe) {
+            System.out.println("Could not create print writer!");
+            npe.printStackTrace();
+        }
+
+
+
     }
+
+    public static double findDistance(double x1, double xCenter, double y1, double yCenter) {
+        return Math.abs(Math.sqrt((Math.pow((x1 - xCenter), 2)) + (Math.pow((y1 - yCenter), 2))));
+    }
+
+    public static boolean dotBelongsToCircle(double distance, double radius) {
+        if (distance <= radius) {
+            return true;
+        } else return false;
+    }
+
+    public static Cell findCellCenterCoordinates(double[] dot1, double[] dot2, double[] dot3, double[] dot4,
+                                                 double xCenter, double yCenter, double radius) {
+          double dot2Distance = findDistance(dot2[0], xCenter, dot2[1], yCenter);
+          boolean dot2belongs = dotBelongsToCircle(dot2Distance, radius);
+          if (!dot2belongs) {
+              return null;
+          }
+
+          double dot3Distance = findDistance(dot3[0], xCenter, dot3[1], yCenter);
+          boolean dot3belongs = dotBelongsToCircle(dot3Distance, radius);
+          if (!dot3belongs) {
+              return null;
+          }
+
+          double dot4Distance = findDistance(dot4[0], xCenter, dot4[1], yCenter);
+          boolean dot4belongs = dotBelongsToCircle(dot4Distance, radius);
+          if (!dot4belongs) {
+              return null;
+          }
+
+          double[] cellCenter = new double[] {(dot1[0] + 0.5), (dot1[1] + 0.5)};
+          return new Cell(cellCenter);
+        }
 
 
     private static void printCollection(String comment, Collection collection) {
