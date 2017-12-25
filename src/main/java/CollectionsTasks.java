@@ -7,18 +7,14 @@ import java.util.*;
 public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
-       /* task1();
+        task1();
         task2("'}(', ')', '[', ']', '{', '}{[]}'");
         task3();
         task4(10);
-        task4(100);
-        task4(1000);
-        task4(10000);
-        task4(100000);
         task5(0);
-        task6();*/
+        task6();
         task7();
-//        task8();
+        task8();
     }
 
     private static void task1() throws Exception {
@@ -159,14 +155,12 @@ public class CollectionsTasks {
                 }
             }
             int listSize = list.size();
-//            printCollection("After remove", list);
 
             list.clear();
             for (int j = 0, num = 1; j < listSize; j++) {
                 list.add(num);
                 num++;
             }
-//            printCollection("After reinit", list);
         }
         long timeConsumed = System.nanoTime() - startTime;
         System.out.println("ArrayList time consumed: " + timeConsumed);
@@ -190,14 +184,11 @@ public class CollectionsTasks {
                 }
             }
             int listSize = list.size();
-//            printCollection("After remove", list);
-
             list.clear();
             for (int j = 0, num = 1; j < listSize; j++) {
                 list.add(num);
                 num++;
             }
-//            printCollection("After reinit", list);
         }
         long timeConsumed = System.nanoTime() - startTime;
         System.out.println("LinkedList time consumed: " + timeConsumed);
@@ -226,21 +217,18 @@ public class CollectionsTasks {
         myCustomClass.addInt(100);
         myCustomClass.addInt(9);
         myCustomClass.addInt(-8);
-
         myCustomClass.findNearestInt(number);
     }
 
     public static class MyCustomClass {
 
         ArrayList<Integer> list;
-
         public MyCustomClass() {
             this.list = new ArrayList<Integer>();
         }
 
         private boolean addInt(int element) {
             return list.add(element);
-
         }
 
         private boolean removeInt(int element) {
@@ -266,7 +254,6 @@ public class CollectionsTasks {
                 }
             }
             printCollection("The nearest int: ", result);
-
         }
     }
 
@@ -326,7 +313,6 @@ public class CollectionsTasks {
         }
     }
 
-
     private static void task8() {
         Map<Integer, double[][]> listOfLines = new HashMap<>();
         listOfLines.put(0, new double[][]{{5.0, -2.0}, {1.0, -4.0}});
@@ -372,30 +358,19 @@ public class CollectionsTasks {
         } else {
             System.out.println("The lines have no intersections");
         }
-
     }
 
         private static double[] findIntersection ( double ax1, double ay1, double ax2, double ay2,
         double bx1, double by1, double bx2, double by2){
             double A1 = ay1 - ay2;
-//        System.out.println("A1 " + A1);
             double B1 = ax2 - ax1;
-//        System.out.println("B1 " + B1);
-
             double C1 = ax1 * ay2 - ax2 * ay1;
-//        System.out.println("C1 " + C1);
 
             double A2 = by1 - by2;
-//        System.out.println("A2 " + A2);
-
             double B2 = bx2 - bx1;
-//        System.out.println("B2 " + B2);
-
             double C2 = bx1 * by2 - bx2 * by1;
-//        System.out.println("C2 " + C2);
 
             double denominator = A1 * B2 - A2 * B1;
-//        System.out.println("den:" + denominator);
             if (denominator == 0) {
                 return null;
             }
@@ -419,51 +394,24 @@ public class CollectionsTasks {
         boolean belongsToASegmentY = false;
         boolean belongsToBSegmentX = false;
         boolean belongsToBSegmentY = false;
-  /*      System.out.println("x=" + x );
-        System.out.println("y=" + y );*/
         if (((ax1 <= x) && (x <= ax2)) || ((ax2 <= x) && (x <= ax1))) {
             belongsToASegmentX = true;
         }
-      /*  System.out.println("belongs to ax: " + belongsToASegmentX);
-        System.out.println("ax1=" +ax1);
-        System.out.println("ax2=" +ax2);
-*/
         if (((ay1 <= y) && (y <= ay2)) || ((ay2 <= y) && (y <= ay1))) {
             belongsToASegmentY = true;
         }
-    /*    System.out.println(ay1 + " <= " + y + " = " + (ay1 <= y));
-        System.out.println(y + " <= " + ay2 + " = " + (y <= ay2));
-        System.out.println(ay2 + " <= " + y +" = " + (ay2 <= y));
-        System.out.println(y  + "<= " + ay2 + " = " + (y <= ay2));
-
-        System.out.println("belongs to ay: " + belongsToASegmentY);
-        System.out.println("ay1=" +ay1);
-        System.out.println("ay2=" +ay2);*/
-
         if (((bx1 <= x) && (x <= bx2)) || ((bx2 <= x) && (x <= bx1))) {
             belongsToBSegmentX = true;
         }
-       /* System.out.println("belongs to bx: " + belongsToBSegmentX);
-        System.out.println("bx1=" +bx1);
-        System.out.println("bx2=" +bx2);
-*/
         if (((by1 <= y) && (y <= by2)) || ((by2 <= y) && (y <= by1))) {
             belongsToBSegmentY = true;
         }
-      /*  System.out.println("belongs to by: " + belongsToBSegmentY);
-        System.out.println("by1=" + by1);
-        System.out.println("by2=" + by2);*/
-
         if (belongsToASegmentX && belongsToASegmentY && belongsToBSegmentX && belongsToBSegmentY) {
             return true;
         } else {
             return false;
         }
     }
-//    7.На клетчатой бумаге в произвольном месте (x0, y0) нарисован круг радиуса R.
-// Вывести в файл описания всех клеток, целиком лежащих внутри круга,
-// в порядке возрастания расстояния от клетки до центра круга.
-// Использовать класс PriorityQueue и интерфейс Comparable
 
     public static class Cell implements Comparable {
         public static double[] circleCenter;
@@ -492,19 +440,16 @@ public class CollectionsTasks {
         }
     }
 
-    public static void task7() {
-     /*   System.out.println("Please enter a double for radius: ");
+    public static void task7() throws FileNotFoundException, UnsupportedEncodingException {
+        System.out.println("Please enter a double for radius: ");
         Scanner scanner = new Scanner(System.in);
-        double radius = scanner.nextDouble();*/
-        double radius = 3.8;
+        double radius = scanner.nextDouble();
 
-      /*  System.out.println("Please a double for Xo: ");
+        System.out.println("Please a double for Xo: ");
         Scanner scanner1 = new Scanner(System.in);
         double xCenter = scanner1.nextDouble();
         System.out.println("Please a double for Yo: ");
-        double yCenter = scanner1.nextDouble();*/
-        double xCenter = 5.0;
-        double yCenter = 4.0;
+        double yCenter = scanner1.nextDouble();
 
         double xMin = (int) Math.ceil(xCenter - radius);
         double xMax = (int) Math.floor(xCenter + radius);
@@ -542,23 +487,16 @@ public class CollectionsTasks {
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             System.out.println("Could not create file \"priority-queue.txt\"!");
             ex.printStackTrace();
+            throw ex;
         }
-        try {
-            Iterator iterator = queue.iterator();
-            while (iterator.hasNext()) {
-                Cell cell = (Cell) iterator.next();
-                double[] cellCenter = cell.cellCenter;
-                writer.println("(" + cellCenter[0] + ", " + cellCenter[1] + ")");
-            }
-            writer.println("Number of cells: " + queue.size());
-            writer.close();
-        } catch (NullPointerException npe) {
-            System.out.println("Could not create print writer!");
-            npe.printStackTrace();
+        Iterator iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            Cell cell = (Cell) iterator.next();
+            double[] cellCenter = cell.cellCenter;
+            writer.println("(" + cellCenter[0] + ", " + cellCenter[1] + ")");
         }
-
-
-
+        writer.println("Number of cells: " + queue.size());
+        writer.close();
     }
 
     public static double findDistance(double x1, double xCenter, double y1, double yCenter) {
