@@ -15,6 +15,7 @@ public class CollectionsTasks {
         task6();
         task7();
         task8();
+        task10();
     }
 
     private static void task1() throws Exception {
@@ -210,6 +211,43 @@ public class CollectionsTasks {
     }
 
     public static void task5(int number) {
+        class MyCustomClass {
+
+            ArrayList<Integer> list;
+            public MyCustomClass() {
+                this.list = new ArrayList<Integer>();
+            }
+
+            private boolean addInt(int element) {
+                return list.add(element);
+            }
+
+            private boolean removeInt(int element) {
+                return list.remove(((Integer) element));
+            }
+
+            private void findNearestInt(int target) {
+                int smallestDifference = Math.abs(list.get(0) - target);
+                int nearestElement = list.get(0);
+                List<Integer> result = new ArrayList<Integer>();
+                result.add(nearestElement);
+                for (int i = 1; i < list.size(); i++) {
+                    int dif = Math.abs(list.get(i) - target);
+                    if (dif < smallestDifference) {
+                        smallestDifference = dif;
+                        nearestElement = list.get(i);
+                        result.clear();
+                        result.add(nearestElement);
+                    }
+
+                    if ((dif == smallestDifference) && (nearestElement != list.get(i))) {
+                        result.add(list.get(i));
+                    }
+                }
+                printCollection("The nearest int: ", result);
+            }
+        }
+
         MyCustomClass myCustomClass = new MyCustomClass();
         myCustomClass.addInt(5);
         myCustomClass.addInt(7);
@@ -218,44 +256,10 @@ public class CollectionsTasks {
         myCustomClass.addInt(9);
         myCustomClass.addInt(-8);
         myCustomClass.findNearestInt(number);
+
     }
 
-    public static class MyCustomClass {
 
-        ArrayList<Integer> list;
-        public MyCustomClass() {
-            this.list = new ArrayList<Integer>();
-        }
-
-        private boolean addInt(int element) {
-            return list.add(element);
-        }
-
-        private boolean removeInt(int element) {
-            return list.remove(((Integer) element));
-        }
-
-        private void findNearestInt(int target) {
-            int smallestDifference = Math.abs(list.get(0) - target);
-            int nearestElement = list.get(0);
-            List<Integer> result = new ArrayList<Integer>();
-            result.add(nearestElement);
-             for (int i = 1; i < list.size(); i++) {
-                int dif = Math.abs(list.get(i) - target);
-                if (dif < smallestDifference) {
-                    smallestDifference = dif;
-                    nearestElement = list.get(i);
-                    result.clear();
-                    result.add(nearestElement);
-                }
-
-                if ((dif == smallestDifference) && (nearestElement != list.get(i))) {
-                    result.add(list.get(i));
-                }
-            }
-            printCollection("The nearest int: ", result);
-        }
-    }
 
     private static void task6() {
         HashMap<Integer, double[]> listOfPoints = new HashMap<Integer, double[]>();
@@ -446,10 +450,9 @@ public class CollectionsTasks {
         double radius = scanner.nextDouble();
 
         System.out.println("Please a double for Xo: ");
-        Scanner scanner1 = new Scanner(System.in);
-        double xCenter = scanner1.nextDouble();
+        double xCenter = scanner.nextDouble();
         System.out.println("Please a double for Yo: ");
-        double yCenter = scanner1.nextDouble();
+        double yCenter = scanner.nextDouble();
 
         double xMin = (int) Math.ceil(xCenter - radius);
         double xMax = (int) Math.floor(xCenter + radius);
@@ -539,6 +542,142 @@ public class CollectionsTasks {
         for (Object item : collection) {
             System.out.println(item);
         }
+    }
+
+    public static void task10() {
+        double distance = 100.0;
+        int nCars = 7;
+        TreeMap<Integer, double[]> start = new TreeMap<>();
+        start.put(1, new double[]{0.1, 50});
+        start.put(2, new double[]{0.2, 60});
+        start.put(3, new double[]{0.3, 60});
+        start.put(4, new double[]{0.4, 70});
+        start.put(5, new double[]{0.5, 50});
+        start.put(6, new double[]{0.6, 70});
+        start.put(7, new double[]{0.7, 60});
+
+        ArrayList<TreeMap<Integer, double[]>> listWithoutTime = new ArrayList<>();
+        for (Map.Entry<Integer, double[]> entry: start.entrySet()) {
+           Integer integer = entry.getKey();
+           double[] db = entry.getValue();
+           TreeMap<Integer, double[]> map = new TreeMap<>();
+           map.put(integer, db);
+           listWithoutTime.add(map);
+        }
+
+        Comparator comparator1 = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                TreeMap<Integer, double[]> treeMap1 = (TreeMap<Integer, double[]>) o1;
+                TreeMap<Integer, double[]> treeMap2 = (TreeMap<Integer, double[]>) o2;
+
+                Integer integer1 = treeMap1.firstEntry().getKey();
+                Integer integer2 = treeMap2.firstEntry().getKey();
+
+                if (integer1 > integer2) {
+                    return 1;
+                }
+                if (integer1 < integer2) {
+                    return -1;
+                }
+                else return 0;
+            }
+        };
+
+        Collections.sort(listWithoutTime,comparator1);
+        System.out.println("before calc: ");
+        printMyarrayList(listWithoutTime);
+
+        Iterator iterator = listWithoutTime.iterator();
+        ArrayList<Integer> list1 = new ArrayList<>();
+        while (iterator.hasNext()) {
+            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
+            Integer integer = obj.firstEntry().getKey();
+            list1.add(integer);
+        }
+
+        ArrayList<TreeMap<Integer, double[]>> listWithTime = new ArrayList<>();
+        iterator = listWithoutTime.iterator();
+        while (iterator.hasNext()) {
+          TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
+          Map.Entry<Integer, double[]> entry =  obj.firstEntry();
+          Integer integer = entry.getKey();
+          double[] db = entry.getValue();
+          double timeConsumed = (distance - db[0]) / db[1];
+          TreeMap<Integer, double[]> map = new TreeMap<>();
+          map.put(integer, new double[]{db[0], db[1], timeConsumed});
+          listWithTime.add(map);
+        }
+
+        Comparator comparator2 = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                TreeMap<Integer, double[]> treeMap1 = (TreeMap<Integer, double[]>) o1;
+                TreeMap<Integer, double[]> treeMap2 = (TreeMap<Integer, double[]>) o2;
+
+                double[] db1 = treeMap1.firstEntry().getValue();
+                double[] db2 = treeMap2.firstEntry().getValue();
+
+                double time1 = db1[2];
+                double time2 = db2[2];
+
+                if (time1 > time2) {
+                    return 1;
+                }
+                if (time1 < time2) {
+                    return -1;
+                } else return 0;
+            }
+        };
+
+        Collections.sort(listWithTime, comparator2);
+        System.out.println("after calc: ");
+        printMyarrayList(listWithTime);
+
+        ArrayList<Integer> listWithout = treeMapListToIntegerList(listWithoutTime);
+        ArrayList<Integer> listWith = treeMapListToIntegerList(listWithTime);
+
+        int overtaking = 0;
+        for (int i = 1; i <= listWithout.size(); i++) {
+            int indexStart = listWithout.indexOf(i);
+            int indexFinish = listWith.indexOf(i);
+            int dif = indexStart - indexFinish;
+            if (dif > 0) {
+                System.out.println("Car number: " + i);
+                System.out.println("Index start: " + indexStart);
+                System.out.println("Index finish: " + indexFinish);
+                System.out.println("Diff: " + dif);
+                overtaking = overtaking + dif;
+            }
+        }
+        System.out.println("Number of overtakings is: " + overtaking);
+    }
+
+    private static void printMyarrayList(ArrayList<TreeMap<Integer, double[]>> list) {
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
+            Map.Entry<Integer, double[]> entry =  obj.firstEntry();
+            Integer integer = entry.getKey();
+            double[] db = entry.getValue();
+            StringBuilder stringBuilder = new StringBuilder()
+                    .append(integer);
+            for (int i = 0; i < db.length; i ++) {
+                stringBuilder.append(" " + db[i]);
+            }
+            System.out.println(stringBuilder.toString());
+        }
+    }
+
+    private static ArrayList<Integer> treeMapListToIntegerList(ArrayList<TreeMap<Integer, double[]>> arrayList) {
+        Iterator iterator = arrayList.iterator();
+        ArrayList<Integer> list = new ArrayList<>();
+        while (iterator.hasNext()) {
+            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
+            Integer integer = obj.firstEntry().getKey();
+            list.add(integer);
+        }
+        return list;
     }
 }
 
