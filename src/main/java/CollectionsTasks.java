@@ -7,14 +7,14 @@ import java.util.*;
 public class CollectionsTasks {
 
     public static void main(String[] args) throws Exception {
-        task1();
+      /*  task1();
         task2("'}(', ')', '[', ']', '{', '}{[]}'");
         task3();
         task4(10);
         task5(0);
         task6();
         task7();
-        task8();
+        task8();*/
         task10();
     }
 
@@ -544,103 +544,100 @@ public class CollectionsTasks {
         }
     }
 
+    public static class Car {
+        private int carNumber;
+        private double location;
+        private double speed;
+        private double timeConsumed;
+
+        Car(int carNumber, double location, double speed, double distance) {
+            this.carNumber = carNumber;
+            this.location = location;
+            this.speed = speed;
+            this.timeConsumed = (distance - location) / speed;
+        }
+
+        public int getCarNumber() {
+            return carNumber;
+        }
+
+        public void printCar() {
+            StringBuilder builder = new StringBuilder()
+                    .append("Car number: ")
+                    .append(carNumber)
+                    .append(", ")
+                    .append("location: ")
+                    .append(location)
+                    .append(", ")
+                    .append("speed: ")
+                    .append(speed)
+                    .append(", ")
+                    .append("time: ")
+                    .append(timeConsumed)
+                    .append(".");
+            System.out.println(builder.toString());
+        }
+    }
+
     public static void task10() {
-        double distance = 100.0;
-        int nCars = 7;
-        TreeMap<Integer, double[]> start = new TreeMap<>();
-        start.put(1, new double[]{0.1, 50});
-        start.put(2, new double[]{0.2, 60});
-        start.put(3, new double[]{0.3, 60});
-        start.put(4, new double[]{0.4, 70});
-        start.put(5, new double[]{0.5, 50});
-        start.put(6, new double[]{0.6, 70});
-        start.put(7, new double[]{0.7, 60});
+        final double distance = 100.0;
 
-        ArrayList<TreeMap<Integer, double[]>> listWithoutTime = new ArrayList<>();
-        for (Map.Entry<Integer, double[]> entry: start.entrySet()) {
-           Integer integer = entry.getKey();
-           double[] db = entry.getValue();
-           TreeMap<Integer, double[]> map = new TreeMap<>();
-           map.put(integer, db);
-           listWithoutTime.add(map);
-        }
+        ArrayList<Car> carsOnStart = new ArrayList<>();
+        carsOnStart.add(new Car(1, 0.1, 50.0, distance));
+        carsOnStart.add(new Car(2, 0.2, 60.0, distance));
+        carsOnStart.add(new Car(3, 0.3, 60.0, distance));
+        carsOnStart.add(new Car(4, 0.4, 70.0, distance));
+        carsOnStart.add(new Car(5, 0.4, 50.0, distance));
+        carsOnStart.add(new Car(6, 0.6, 70.0, distance));
+        carsOnStart.add(new Car(7, 0.7, 60.0, distance));
 
-        Comparator comparator1 = new Comparator() {
+        Comparator comparatorByLocation = new Comparator() {
             @Override
             public int compare(Object o1, Object o2) {
-                TreeMap<Integer, double[]> treeMap1 = (TreeMap<Integer, double[]>) o1;
-                TreeMap<Integer, double[]> treeMap2 = (TreeMap<Integer, double[]>) o2;
+                Car car1 = (Car) o1;
+                Car car2 = (Car) o2;
 
-                Integer integer1 = treeMap1.firstEntry().getKey();
-                Integer integer2 = treeMap2.firstEntry().getKey();
+                double location1 = car1.location;
+                double location2 = car2.location;
 
-                if (integer1 > integer2) {
+                if (location1 > location2) {
                     return 1;
                 }
-                if (integer1 < integer2) {
-                    return -1;
-                }
-                else return 0;
-            }
-        };
-
-        Collections.sort(listWithoutTime,comparator1);
-        System.out.println("before calc: ");
-        printMyarrayList(listWithoutTime);
-
-        Iterator iterator = listWithoutTime.iterator();
-        ArrayList<Integer> list1 = new ArrayList<>();
-        while (iterator.hasNext()) {
-            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
-            Integer integer = obj.firstEntry().getKey();
-            list1.add(integer);
-        }
-
-        ArrayList<TreeMap<Integer, double[]>> listWithTime = new ArrayList<>();
-        iterator = listWithoutTime.iterator();
-        while (iterator.hasNext()) {
-          TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
-          Map.Entry<Integer, double[]> entry =  obj.firstEntry();
-          Integer integer = entry.getKey();
-          double[] db = entry.getValue();
-          double timeConsumed = (distance - db[0]) / db[1];
-          TreeMap<Integer, double[]> map = new TreeMap<>();
-          map.put(integer, new double[]{db[0], db[1], timeConsumed});
-          listWithTime.add(map);
-        }
-
-        Comparator comparator2 = new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                TreeMap<Integer, double[]> treeMap1 = (TreeMap<Integer, double[]>) o1;
-                TreeMap<Integer, double[]> treeMap2 = (TreeMap<Integer, double[]>) o2;
-
-                double[] db1 = treeMap1.firstEntry().getValue();
-                double[] db2 = treeMap2.firstEntry().getValue();
-
-                double time1 = db1[2];
-                double time2 = db2[2];
-
-                if (time1 > time2) {
-                    return 1;
-                }
-                if (time1 < time2) {
+                if (location1 < location2) {
                     return -1;
                 } else return 0;
             }
         };
 
-        Collections.sort(listWithTime, comparator2);
-        System.out.println("after calc: ");
-        printMyarrayList(listWithTime);
+        Comparator comparatorByTimeConsumed = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                Car car1 = (Car) o1;
+                Car car2 = (Car) o2;
 
-        ArrayList<Integer> listWithout = treeMapListToIntegerList(listWithoutTime);
-        ArrayList<Integer> listWith = treeMapListToIntegerList(listWithTime);
+                double timeConsumed1 = car1.timeConsumed;
+                double timeConsumed2 = car2.timeConsumed;
+
+                if (timeConsumed1 > timeConsumed2) {
+                    return 1;
+                }
+                if (timeConsumed1 < timeConsumed2) {
+                    return -1;
+                } else return 0;
+            }
+        };
+
+        Collections.sort(carsOnStart, comparatorByLocation);
+        printCarCollection(carsOnStart);
+
+        ArrayList<Car> carsOnFinish = (ArrayList<Car>) carsOnStart.clone();
+        Collections.sort(carsOnFinish, comparatorByTimeConsumed);
+        printCarCollection(carsOnFinish);
 
         int overtaking = 0;
-        for (int i = 1; i <= listWithout.size(); i++) {
-            int indexStart = listWithout.indexOf(i);
-            int indexFinish = listWith.indexOf(i);
+        for (int i = 1; i <= carsOnStart.size(); i++) {
+            int indexStart = getIndexByProperty(carsOnStart, i);
+            int indexFinish = getIndexByProperty(carsOnFinish, i);
             int dif = indexStart - indexFinish;
             if (dif > 0) {
                 System.out.println("Car number: " + i);
@@ -653,31 +650,24 @@ public class CollectionsTasks {
         System.out.println("Number of overtakings is: " + overtaking);
     }
 
-    private static void printMyarrayList(ArrayList<TreeMap<Integer, double[]>> list) {
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
-            Map.Entry<Integer, double[]> entry =  obj.firstEntry();
-            Integer integer = entry.getKey();
-            double[] db = entry.getValue();
-            StringBuilder stringBuilder = new StringBuilder()
-                    .append(integer);
-            for (int i = 0; i < db.length; i ++) {
-                stringBuilder.append(" " + db[i]);
+    private static int getIndexByProperty(ArrayList<Car> cars, int i) {
+        for (int j = 0; j < cars.size(); j++) {
+            Car car = cars.get(j);
+            if (car != null) {
+                if (cars.get(j).getCarNumber() == i) {
+                    return j;
+                }
             }
-            System.out.println(stringBuilder.toString());
         }
+        return -1;
     }
 
-    private static ArrayList<Integer> treeMapListToIntegerList(ArrayList<TreeMap<Integer, double[]>> arrayList) {
+    private static void printCarCollection(ArrayList<Car> arrayList) {
         Iterator iterator = arrayList.iterator();
-        ArrayList<Integer> list = new ArrayList<>();
         while (iterator.hasNext()) {
-            TreeMap<Integer, double[]> obj = (TreeMap<Integer, double[]>) iterator.next();
-            Integer integer = obj.firstEntry().getKey();
-            list.add(integer);
+            Car car = (Car)iterator.next();
+            car.printCar();
         }
-        return list;
     }
-}
 
+}
